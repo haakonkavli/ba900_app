@@ -1,0 +1,7 @@
+
+# !!! Important: Do not commit user_config file:
+
+user_config.R
+
+*.Rproj.user
+*.Rproj
