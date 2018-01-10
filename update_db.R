@@ -1,13 +1,17 @@
 library(data.table)
 library(RMySQL)
 
-source('config.R')  # Important: Create non-public gitignore file with username and password for DB
+source('user_config.R')  # Important: Create non-public gitignore file with username and password for DB
 
 banks <- c('TOT','ASA','ABL','CPI','FSR','INL','NED', 'SBK')
 ba900 <- data.table()
 for (bank in banks) {
 
-    dat <- data.table(read.csv(paste0('H:/Haakon/Research/BA900/BA900 data/Data_OutPut/BA900_ExportData/',bank,'.csv')))
+    dat <- data.table(
+        read.csv(
+            paste0(
+                config$raw_data_path,
+                bank,'.csv')))
 
     dm <- melt(dat,id.var = 'Dates')
 
@@ -21,10 +25,10 @@ for (bank in banks) {
 write.csv(ba900,'ba900.csv',row.names = F)
 
 cnx <- dbConnect(MySQL(),
-                 user = config$username,
-                 password = config$password,
-                 dbname = config$dbname,
-                 host = config$host)
+                 user = config$db_username,
+                 password = config$db_password,
+                 dbname = 'pim_ts',
+                 host = config$db_host)
 
 # Update ts_raw_macro and ts_pit_macro:
 table_name <- 'table_name'
